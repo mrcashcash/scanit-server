@@ -1,0 +1,67 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Manufacturer {
+  id                Int      @id @default(autoincrement())
+  name              String   @unique
+  address           String?
+  country           String?
+  contactName       String?
+  contactEmail      String?
+  contactPhone      String?
+  website           String?
+  foundingDate      DateTime?
+  businessType      String?  // E.g., Corporation, LLC, Partnership, etc.
+  employeesCount    Int?
+  revenue           Float?
+  yearEstablished   Int?
+  // Add more relevant fields about the manufacturer
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  products          Product[] // Reverse relation to the Product table
+}
+
+model Product {
+  id          Int      @id @default(autoincrement())
+  barcode     String   @unique
+  name        String
+  description String?
+  price       Float?
+  manufacturer      Manufacturer? @relation(fields: [manufacturerId], references: [id])
+  manufacturerId    Int?     // Reference to the Manufacturer table
+  importer        String?
+  category        String?
+  originCountry   String?
+  imageUrl        String?
+  likeCount   Int    @default(0)
+  dislikeCount Int   @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// model User {
+//   id    Int     @id @default(autoincrement())
+//   email String  @unique
+//   name  String?
+//   posts Post[]
+// }
+
+// model Post {
+//   id        Int      @id @default(autoincrement())
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+//   title     String
+//   content   String?
+//   published Boolean  @default(false)
+//   viewCount Int      @default(0)
+//   author    User?    @relation(fields: [authorId], references: [id])
+//   authorId  Int?
+// }
